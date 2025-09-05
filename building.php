@@ -4,7 +4,7 @@
  * /buildings/{slug} のURLでアクセス
  */
 
-require_once 'db_connect.php';
+require_once 'db_connect_rest.php';
 
 // スラッグの取得
 $slug = $_GET['slug'] ?? '';

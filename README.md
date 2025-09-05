@@ -49,16 +49,32 @@ pocketnavi_test_02/
 
 ### 2. 環境変数の設定
 
-`.env` ファイルを作成し、データベース接続情報を設定：
+プロジェクトルートに `.env` ファイルを作成し、データベース接続情報を設定：
 
 ```env
-SUPABASE_DB_HOST=your-supabase-host
+# Supabase REST API接続設定（推奨）
+VITE_SUPABASE_URL=https://your-project-ref.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key-here
+VITE_USE_SUPABASE=true
+
+# または PostgreSQL直接接続設定
+SUPABASE_DB_HOST=your-project-ref.supabase.co
 SUPABASE_DB_PORT=5432
 SUPABASE_DB_NAME=postgres
 SUPABASE_DB_USER=postgres
-SUPABASE_DB_PASSWORD=your-password
-APP_ENV=production
+SUPABASE_DB_PASSWORD=your-password-here
+APP_ENV=development
 ```
+
+**重要**: `.env` ファイルは機密情報を含むため、Gitにコミットしないでください。
+
+#### Supabaseでの接続情報の取得方法
+
+1. Supabase ダッシュボードにログイン
+2. プロジェクトを選択
+3. Settings → Database に移動
+4. Connection string の情報を確認
+5. 上記の形式で `.env` ファイルに記述
 
 ### 3. データベースの準備
 

@@ -4,7 +4,7 @@
  * 建築物検索システムのメインページ
  */
 
-require_once 'db_connect_safe.php';
+require_once 'db_connect_rest.php';
 
 // 検索パラメータの取得
 $query = $_GET['q'] ?? '';

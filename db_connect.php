@@ -4,6 +4,20 @@
  * Supabase PostgreSQL データベースへの接続設定
  */
 
+// .envファイルの読み込み（存在する場合）
+if (file_exists('.env')) {
+    $lines = file('.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (strpos($line, '=') !== false && strpos($line, '#') !== 0) {
+            list($key, $value) = explode('=', $line, 2);
+            $_ENV[trim($key)] = trim($value);
+        }
+    }
+}
+
+// アプリケーション環境の設定
+$app_env = $_ENV['APP_ENV'] ?? 'development';
+
 // データベース接続設定
 $db_config = [
     'host' => $_ENV['SUPABASE_DB_HOST'] ?? 'localhost',
@@ -11,7 +25,7 @@ $db_config = [
     'dbname' => $_ENV['SUPABASE_DB_NAME'] ?? 'postgres',
     'user' => $_ENV['SUPABASE_DB_USER'] ?? 'postgres',
     'password' => $_ENV['SUPABASE_DB_PASSWORD'] ?? '',
-    'sslmode' => 'require'
+    'sslmode' => 'prefer'  // require から prefer に変更
 ];
 
 // PDO接続文字列の構築
@@ -23,12 +37,36 @@ $dsn = sprintf(
     $db_config['sslmode']
 );
 
+// PDO PostgreSQL ドライバーの確認
+if (!extension_loaded('pdo_pgsql')) {
+    if ($app_env === 'production') {
+        die('データベース接続エラーが発生しました。');
+    } else {
+        echo "<h2>PDO PostgreSQL ドライバーエラー</h2>";
+        echo "<p><strong>問題:</strong> PDO PostgreSQL ドライバーがインストールされていません。</p>";
+        echo "<h3>解決方法:</h3>";
+        echo "<ul>";
+        echo "<li><strong>XAMPP/WAMP:</strong> php.ini で <code>extension=pdo_pgsql</code> のコメントアウトを解除</li>";
+        echo "<li><strong>Windows:</strong> php_pgsql.dll と php_pdo_pgsql.dll を有効化</li>";
+        echo "<li><strong>Linux:</strong> <code>sudo apt-get install php-pgsql</code> を実行</li>";
+        echo "</ul>";
+        echo "<h3>現在のPHP拡張:</h3>";
+        echo "<ul>";
+        foreach (PDO::getAvailableDrivers() as $driver) {
+            echo "<li>$driver</li>";
+        }
+        echo "</ul>";
+        die();
+    }
+}
+
 try {
-    // PDO接続の作成
+    // PDO接続の作成（タイムアウト設定を追加）
     $pdo = new PDO($dsn, $db_config['user'], $db_config['password'], [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES => false,
+        PDO::ATTR_TIMEOUT => 30,  // 30秒のタイムアウト
     ]);
     
     // 文字エンコーディングの設定
@@ -38,11 +76,29 @@ try {
     // エラーログの記録
     error_log("Database connection failed: " . $e->getMessage());
     
-    // 本番環境では詳細なエラー情報を表示しない
-    if ($_ENV['APP_ENV'] === 'production') {
+    // 開発環境では詳細なエラー情報を表示
+    if ($app_env === 'production') {
         die('データベース接続エラーが発生しました。');
     } else {
-        die('Database connection failed: ' . $e->getMessage());
+        echo "<h2>データベース接続エラー</h2>";
+        echo "<p><strong>エラーメッセージ:</strong> " . htmlspecialchars($e->getMessage()) . "</p>";
+        echo "<h3>接続設定:</h3>";
+        echo "<ul>";
+        echo "<li>Host: " . htmlspecialchars($db_config['host']) . "</li>";
+        echo "<li>Port: " . htmlspecialchars($db_config['port']) . "</li>";
+        echo "<li>Database: " . htmlspecialchars($db_config['dbname']) . "</li>";
+        echo "<li>User: " . htmlspecialchars($db_config['user']) . "</li>";
+        echo "<li>Password: " . (empty($db_config['password']) ? '未設定' : '設定済み') . "</li>";
+        echo "</ul>";
+        echo "<h3>環境変数の確認:</h3>";
+        echo "<ul>";
+        foreach (['SUPABASE_DB_HOST', 'SUPABASE_DB_PORT', 'SUPABASE_DB_NAME', 'SUPABASE_DB_USER', 'SUPABASE_DB_PASSWORD'] as $var) {
+            $value = $_ENV[$var] ?? getenv($var);
+            echo "<li>$var: " . ($value ? '設定済み' : '未設定') . "</li>";
+        }
+        echo "</ul>";
+        echo "<p><strong>解決方法:</strong> .envファイルを作成してデータベース接続情報を設定してください。</p>";
+        die();
     }
 }
 
