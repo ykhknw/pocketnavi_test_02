@@ -1,0 +1,761 @@
+/* リセットとベーススタイル */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background-color: #f8f9fa;
+    color: #202124;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* ヘッダー */
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.logo {
+    font-size: 2.5rem;
+    font-weight: 300;
+    margin-bottom: 8px;
+}
+
+.logo a {
+    color: #1a73e8;
+    text-decoration: none;
+}
+
+.logo a:hover {
+    text-decoration: underline;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    color: #5f6368;
+    font-weight: 400;
+}
+
+.breadcrumb {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #5f6368;
+}
+
+.breadcrumb a {
+    color: #1a73e8;
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+/* 検索フォーム */
+.search-container {
+    margin-bottom: 30px;
+}
+
+.search-form {
+    width: 100%;
+}
+
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 1px solid #dfe1e5;
+    border-radius: 24px;
+    padding: 0 16px;
+    box-shadow: 0 2px 5px 1px rgba(64,60,67,.16);
+    transition: box-shadow 0.3s ease;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.search-box:hover {
+    box-shadow: 0 2px 8px 1px rgba(64,60,67,.24);
+}
+
+.search-box:focus-within {
+    box-shadow: 0 2px 8px 1px rgba(64,60,67,.24);
+    border-color: #1a73e8;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 12px 0;
+    font-size: 16px;
+    background: transparent;
+    color: #202124;
+}
+
+.search-input::placeholder {
+    color: #9aa0a6;
+}
+
+.search-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    color: #5f6368;
+    transition: color 0.2s ease;
+}
+
+.search-button:hover {
+    color: #1a73e8;
+}
+
+/* 検索結果 */
+.results-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.results-header {
+    padding: 20px;
+    border-bottom: 1px solid #f1f3f4;
+    background: #f8f9fa;
+}
+
+.results-info {
+    color: #5f6368;
+    font-size: 0.9rem;
+}
+
+.results {
+    padding: 0;
+}
+
+.result-item {
+    padding: 20px;
+    border-bottom: 1px solid #f1f3f4;
+    transition: background-color 0.2s ease;
+}
+
+.result-item:hover {
+    background-color: #f8f9fa;
+}
+
+.result-item:last-child {
+    border-bottom: none;
+}
+
+.result-title {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.result-title a {
+    color: #1a73e8;
+    text-decoration: none;
+}
+
+.result-title a:hover {
+    text-decoration: underline;
+}
+
+.result-title-en {
+    font-size: 1rem;
+    color: #5f6368;
+    margin-bottom: 8px;
+}
+
+.result-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: #5f6368;
+}
+
+.result-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.result-meta-item svg {
+    width: 16px;
+    height: 16px;
+}
+
+.result-types {
+    margin-bottom: 8px;
+}
+
+.result-type {
+    display: inline-block;
+    background: #e8f0fe;
+    color: #1a73e8;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    margin-right: 6px;
+    margin-bottom: 4px;
+}
+
+.result-architects {
+    margin-top: 8px;
+}
+
+.result-architects-label {
+    font-size: 0.9rem;
+    color: #5f6368;
+    margin-bottom: 4px;
+}
+
+.architect-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.architect-link {
+    color: #1a73e8;
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.architect-link:hover {
+    background-color: #e8f0fe;
+    text-decoration: underline;
+}
+
+.result-rank {
+    font-size: 0.8rem;
+    color: #9aa0a6;
+    margin-top: 8px;
+}
+
+/* ページネーション */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 20px;
+    background: #f8f9fa;
+}
+
+.pagination-btn {
+    background: white;
+    border: 1px solid #dadce0;
+    color: #1a73e8;
+    padding: 8px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.pagination-btn:hover {
+    background: #f8f9fa;
+    border-color: #1a73e8;
+}
+
+.pagination-info {
+    color: #5f6368;
+    font-size: 0.9rem;
+    margin: 0 16px;
+}
+
+/* ウェルカムメッセージ */
+.welcome-message {
+    text-align: center;
+    padding: 60px 20px;
+    color: #5f6368;
+}
+
+.welcome-message h2 {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+    color: #202124;
+}
+
+.search-examples {
+    margin-top: 40px;
+    text-align: left;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.search-examples h3 {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    color: #202124;
+}
+
+.search-examples ul {
+    list-style: none;
+    padding: 0;
+}
+
+.search-examples li {
+    padding: 4px 0;
+    color: #5f6368;
+}
+
+/* 空の状態 */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #5f6368;
+}
+
+.empty-state svg {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    color: #202124;
+}
+
+/* 建築家詳細ページ */
+.architect-profile {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+.architect-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.architect-name {
+    font-size: 2rem;
+    font-weight: 500;
+    color: #202124;
+    margin-bottom: 8px;
+}
+
+.architect-name-en {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 300;
+    color: #5f6368;
+    margin-top: 4px;
+}
+
+.architect-lifespan {
+    font-size: 1rem;
+    color: #5f6368;
+}
+
+.architect-biography,
+.architect-awards {
+    margin-bottom: 30px;
+}
+
+.architect-biography h2,
+.architect-awards h2 {
+    font-size: 1.3rem;
+    color: #202124;
+    margin-bottom: 12px;
+    border-bottom: 2px solid #1a73e8;
+    padding-bottom: 4px;
+}
+
+.biography-content,
+.awards-content {
+    line-height: 1.8;
+    color: #5f6368;
+}
+
+/* 建築作品一覧 */
+.buildings-section {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+.buildings-section h2 {
+    font-size: 1.5rem;
+    color: #202124;
+    margin-bottom: 8px;
+}
+
+.buildings-count {
+    color: #5f6368;
+    margin-bottom: 20px;
+}
+
+.buildings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.building-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    transition: box-shadow 0.2s ease;
+}
+
+.building-card:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.building-title {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+}
+
+.building-title a {
+    color: #1a73e8;
+    text-decoration: none;
+}
+
+.building-title a:hover {
+    text-decoration: underline;
+}
+
+.building-title-en {
+    font-size: 0.9rem;
+    color: #5f6368;
+    margin-bottom: 12px;
+}
+
+.building-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: #5f6368;
+}
+
+.building-year,
+.building-location {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.building-year svg,
+.building-location svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* 建築物詳細ページ */
+.building-detail {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+.building-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.building-title {
+    font-size: 2rem;
+    font-weight: 500;
+    color: #202124;
+    margin-bottom: 8px;
+}
+
+.building-title-en {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 300;
+    color: #5f6368;
+    margin-top: 4px;
+}
+
+.building-info {
+    margin-bottom: 30px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.info-item {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.info-item h3 {
+    font-size: 1rem;
+    color: #202124;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 4px;
+}
+
+.info-item p {
+    color: #5f6368;
+    line-height: 1.6;
+}
+
+.building-types {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.building-type {
+    background: #e8f0fe;
+    color: #1a73e8;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+}
+
+.map-link {
+    margin-top: 8px;
+}
+
+.map-link a {
+    color: #1a73e8;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.map-link a:hover {
+    text-decoration: underline;
+}
+
+.architects-section,
+.building-description,
+.building-history,
+.building-technical {
+    margin-bottom: 30px;
+}
+
+.architects-section h2,
+.building-description h2,
+.building-history h2,
+.building-technical h2 {
+    font-size: 1.3rem;
+    color: #202124;
+    margin-bottom: 12px;
+    border-bottom: 2px solid #1a73e8;
+    padding-bottom: 4px;
+}
+
+.architects-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.architect-item {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+}
+
+.architect-item h3 {
+    margin-bottom: 8px;
+}
+
+.architect-item h3 a {
+    color: #1a73e8;
+    text-decoration: none;
+}
+
+.architect-item h3 a:hover {
+    text-decoration: underline;
+}
+
+.architect-name-en {
+    font-size: 0.9rem;
+    color: #5f6368;
+}
+
+.description-content,
+.history-content,
+.technical-content {
+    line-height: 1.8;
+    color: #5f6368;
+}
+
+/* 関連リンク */
+.related-links {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 30px;
+}
+
+.related-links h2 {
+    font-size: 1.3rem;
+    color: #202124;
+    margin-bottom: 12px;
+    border-bottom: 2px solid #1a73e8;
+    padding-bottom: 4px;
+}
+
+.related-links ul {
+    list-style: none;
+    padding: 0;
+}
+
+.related-links li {
+    margin-bottom: 8px;
+}
+
+.related-links a {
+    color: #1a73e8;
+    text-decoration: none;
+}
+
+.related-links a:hover {
+    text-decoration: underline;
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+    .container {
+        padding: 16px;
+    }
+    
+    .logo {
+        font-size: 2rem;
+    }
+    
+    .search-input {
+        font-size: 16px; /* iOS Safari のズーム防止 */
+    }
+    
+    .result-item {
+        padding: 16px;
+    }
+    
+    .result-meta {
+        flex-direction: column;
+        gap: 6px;
+    }
+    
+    .pagination {
+        flex-wrap: wrap;
+    }
+    
+    .buildings-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .architects-list {
+        grid-template-columns: 1fr;
+    }
+    
+    .architect-name,
+    .building-title {
+        font-size: 1.5rem;
+    }
+}
+
+/* ダークモード対応 */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #202124;
+        color: #e8eaed;
+    }
+    
+    .search-box {
+        background: #3c4043;
+        border-color: #5f6368;
+    }
+    
+    .search-input {
+        color: #e8eaed;
+    }
+    
+    .search-input::placeholder {
+        color: #9aa0a6;
+    }
+    
+    .results-container,
+    .architect-profile,
+    .buildings-section,
+    .building-detail,
+    .related-links {
+        background: #3c4043;
+        border-color: #5f6368;
+    }
+    
+    .result-item {
+        border-bottom-color: #5f6368;
+    }
+    
+    .result-item:hover {
+        background-color: #2d2e30;
+    }
+    
+    .result-title-en,
+    .architect-name-en,
+    .building-title-en {
+        color: #9aa0a6;
+    }
+    
+    .result-meta,
+    .building-meta {
+        color: #9aa0a6;
+    }
+    
+    .pagination-btn {
+        background: #3c4043;
+        border-color: #5f6368;
+        color: #1a73e8;
+    }
+    
+    .pagination-btn:hover {
+        background: #2d2e30;
+    }
+    
+    .building-card,
+    .info-item,
+    .architect-item {
+        background: #2d2e30;
+        border-color: #5f6368;
+    }
+    
+    .building-card:hover {
+        box-shadow: 0 2px 8px rgba(255,255,255,0.1);
+    }
+}

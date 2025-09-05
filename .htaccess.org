@@ -1,0 +1,220 @@
+# PocketNavi 建築物検索システム - URLリライト設定
+
+# Apacheのリライトエンジンを有効化
+RewriteEngine On
+
+# セキュリティ設定
+# サーバー情報の隠蔽（.htaccessでは使用不可）
+# ServerTokens Prod
+# ServerSignature Off
+
+# ディレクトリ一覧表示の無効化
+Options -Indexes
+
+# フォルダアクセスの禁止
+Options -ExecCGI
+
+# ファイルアップロードの制限（.htaccessでは制限あり）
+# <Files "*.php">
+#     # アップロードされたファイルの実行を禁止
+#     <IfModule mod_php.c>
+#         php_flag file_uploads Off
+#     </IfModule>
+# </Files>
+
+# セキュリティヘッダーの設定
+<IfModule mod_headers.c>
+    # XSS保護
+    Header always set X-XSS-Protection "1; mode=block"
+    
+    # コンテンツタイプの強制
+    Header always set X-Content-Type-Options "nosniff"
+    
+    # フレーム埋め込みの制限
+    Header always set X-Frame-Options "SAMEORIGIN"
+    
+    # リファラーポリシー
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    
+    # コンテンツセキュリティポリシー
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self';"
+</IfModule>
+
+# キャッシュ設定
+<IfModule mod_expires.c>
+    ExpiresActive On
+    
+    # CSS/JSファイルのキャッシュ（1週間）
+    ExpiresByType text/css "access plus 1 week"
+    ExpiresByType application/javascript "access plus 1 week"
+    ExpiresByType text/javascript "access plus 1 week"
+    
+    # 画像ファイルのキャッシュ（1ヶ月）
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    
+    # HTMLファイルのキャッシュ（1時間）
+    ExpiresByType text/html "access plus 1 hour"
+    
+    # フォントファイルのキャッシュ（1年）
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType application/font-woff "access plus 1 year"
+    ExpiresByType application/font-woff2 "access plus 1 year"
+</IfModule>
+
+# 圧縮設定
+<IfModule mod_deflate.c>
+    # HTML、CSS、JavaScript、XML、JSONを圧縮
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/json
+</IfModule>
+
+# URLリライトルール
+
+# 1. 建築家詳細ページ
+# /architects/{slug} → architect.php?slug={slug}
+RewriteRule ^architects/([a-zA-Z0-9\-_]+)/?$ architect.php?slug=$1 [L,QSA]
+
+# 2. 建築物詳細ページ
+# /buildings/{slug} → building.php?slug={slug}
+RewriteRule ^buildings/([a-zA-Z0-9\-_]+)/?$ building.php?slug=$1 [L,QSA]
+
+# 3. 検索結果ページ（オプション）
+# /search?q={query} → index.php?q={query}
+RewriteRule ^search/?$ index.php [L,QSA]
+
+# 4. トップページのリダイレクト
+# /home → /
+RewriteRule ^home/?$ / [R=301,L]
+
+# 5. 末尾スラッシュの統一
+# 末尾にスラッシュがない場合は追加
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !/$
+RewriteRule ^(.*)$ $1/ [R=301,L]
+
+# 6. 末尾スラッシュの削除（ファイルの場合）
+# ファイルに末尾スラッシュがある場合は削除
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^(.*)/$ $1 [R=301,L]
+
+# 7. 重複スラッシュの削除
+RewriteCond %{THE_REQUEST} \s[^?]*//
+RewriteRule ^(.*)$ /$1 [R=301,L]
+
+# 8. 大文字小文字の統一（小文字に統一）
+RewriteCond %{REQUEST_URI} [A-Z]
+RewriteRule (.*) ${lowercase:$1} [R=301,L]
+
+# 9. 不要な拡張子の削除
+# .php拡張子を削除してリダイレクト
+RewriteCond %{THE_REQUEST} /([^.]+)\.php[\s?] [NC]
+RewriteRule ^ /%1? [R=301,L]
+
+# 10. 404エラーページの設定
+ErrorDocument 404 /404.php
+
+# 11. 500エラーページの設定
+ErrorDocument 500 /500.php
+
+# 12. アクセス制限
+# 管理ファイルへのアクセス制限
+<Files ".htaccess">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+<Files "db_connect.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# 13. ファイルタイプの設定
+<IfModule mod_mime.c>
+    # PHPファイルの設定
+    AddType application/x-httpd-php .php
+    
+    # 画像ファイルの設定
+    AddType image/jpeg .jpg .jpeg
+    AddType image/png .png
+    AddType image/gif .gif
+    AddType image/svg+xml .svg
+    AddType image/webp .webp
+    
+    # フォントファイルの設定
+    AddType font/woff .woff
+    AddType font/woff2 .woff2
+    AddType application/font-woff .woff
+    AddType application/font-woff2 .woff2
+    
+    # その他のファイルタイプ
+    AddType text/css .css
+    AddType application/javascript .js
+    AddType application/json .json
+    AddType text/xml .xml
+</IfModule>
+
+# 14. 文字エンコーディングの設定
+AddDefaultCharset UTF-8
+
+# 15. タイムゾーンの設定（.htaccessでは制限あり）
+# <IfModule mod_php.c>
+#     php_value date.timezone "Asia/Tokyo"
+# </IfModule>
+
+# 16. メモリ制限の設定（.htaccessでは制限あり）
+# <IfModule mod_php.c>
+#     php_value memory_limit "256M"
+#     php_value max_execution_time "30"
+#     php_value max_input_time "30"
+# </IfModule>
+
+# 17. アップロード制限の設定（.htaccessでは制限あり）
+# <IfModule mod_php.c>
+#     php_value upload_max_filesize "10M"
+#     php_value post_max_size "10M"
+# </IfModule>
+
+# 18. セッション設定（.htaccessでは制限あり）
+# <IfModule mod_php.c>
+#     php_value session.cookie_httponly "1"
+#     php_value session.cookie_secure "1"
+#     php_value session.use_strict_mode "1"
+# </IfModule>
+
+# 19. ログ設定（.htaccessでは使用不可）
+# <IfModule mod_log_config.c>
+#     LogFormat "%h %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" combined
+#     CustomLog logs/access.log combined
+#     ErrorLog logs/error.log
+# </IfModule>
+
+# 20. リダイレクト設定（wwwの統一）
+# wwwありのURLをwwwなしにリダイレクト
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+# 21. HTTPS強制リダイレクト（本番環境用）
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# 22. トラッキングパラメータの除去
+RewriteCond %{QUERY_STRING} ^(.*)&?(utm_source|utm_medium|utm_campaign|utm_term|utm_content|fbclid|gclid)=[^&]*(.*)$ [NC]
+RewriteRule ^(.*)$ /$1?%1%3 [R=301,L]
+
+# 23. 末尾のクエリパラメータのクリーンアップ
+RewriteCond %{QUERY_STRING} ^(.*)&$
+RewriteRule ^(.*)$ /$1?%1 [R=301,L]
